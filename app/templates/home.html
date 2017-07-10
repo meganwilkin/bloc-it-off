@@ -1,1 +1,31 @@
-<h1>Home Page</h1>
+<h<div class="container">
+   <div class="task-window">
+      <div class="list-header">
+         <h3>Current Tasks</h3>
+      </div>
+      <div class="list-container">
+         <ul>
+            <li ng-repeat="task in home.tasks" class="list-container-item">
+              <div class="task-item-name"> {{ task.name }}
+                 <!-- <div class="task-item-priority"> {{ task.priority }} -->
+                    <div class="task-item-details">{{ task.isCompleted }}
+                    </div>
+                <!-- </div> -->
+            </li>
+         </ul>
+      </div>
+   </div>
+</div>
+
+<div id="add-task">
+    <div class="input-group">
+        <form ng-submit="addTask()">
+            <input type="text" class="form-control" ng-model="taskText" autofocus>
+            <!-- <input type="radiobox" class="form-control"> -->
+            <!-- move buttons inside form then combine clearText w/ addTask. Watch type = "submit"-->
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-success">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
