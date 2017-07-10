@@ -1,31 +1,81 @@
-<h<div class="container">
-   <div class="task-window">
-      <div class="list-header">
-         <h3>Current Tasks</h3>
+<nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Bloc It Off</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><button type="button" class="btn" ng-class="showCurrentTasks ? 'btn-primary' : '' " ng-click="showCurrentTasks = !showCurrentTasks">Current</button></li>
+            <li><button type="button" class="btn" ng-class="showCompletedTasks ? 'btn-success' : '' "ng-click="showCompletedTasks = !showCompletedTasks">Completed</button></li>
+            <li><button type="button" class="btn" ng-class="showExpiredTasks ? 'btn-danger' : '' "ng-click="showExpiredTasks = !showExpiredTasks">Expired</button></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
-      <div class="list-container">
-         <ul>
-            <li ng-repeat="task in home.tasks" class="list-container-item">
-              <div class="task-item-name"> {{ task.name }}
-                 <!-- <div class="task-item-priority"> {{ task.priority }} -->
-                    <div class="task-item-details">{{ task.isCompleted }}
-                    </div>
-                <!-- </div> -->
-            </li>
-         </ul>
-      </div>
-   </div>
-</div>
+    </nav>
 
-<div id="add-task">
-    <div class="input-group">
-        <form ng-submit="addTask()">
-            <input type="text" class="form-control" ng-model="taskText" autofocus>
-            <!-- <input type="radiobox" class="form-control"> -->
-            <!-- move buttons inside form then combine clearText w/ addTask. Watch type = "submit"-->
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-success">Add</button>
-            </div>
-        </form>
-    </div>
+<div class="container">
+<div class="col-md-3">
+  <h4>Task Priority Filter</h4>
+  <div class="list-group">
+    <a href="#" class="list-group-item" ng-class="showHighPriority ? 'active' : '' " ng-click="showHighPriority = !showHighPriority">High</a>
+    <a href="#" class="list-group-item" ng-class="showMediumPriority ? 'active' : ''" ng-click="showMediumPriority = !showMediumPriority">Medium</a>
+    <a href="#" class="list-group-item" ng-class="showLowPriority ? 'active' : ''" ng-click="showLowPriority = !showLowPriority">Low</a>
+  </div>
+</div>
+<div class="col-md-8">
+<div class="panel panel-default task-panel">
+  <div class="panel-heading">
+    My Bloc It Off Tasks
+    <span class="pull-right"><a href="#" ng-click="showAddTask = !showAddTask">
+      <!-- Collapse -->
+      <button type="button" class="btn btn-primary">Add Task</button>
+    </a>
+    </span>
+  </div>
+<table class="table">
+  <thead>
+    <tr><th>Task Name</th> <th>Priority</th> <th>Status</th><th>Task Action</th> </tr>
+  </thead>
+  <tbody>
+    <tr ng-show="showAddTask">
+      <form>
+      <td>
+        <input type="text" placeholder="Task Name" ng-model="taskName">
+      </td>
+      <td>
+        <div class="btn-group" uib-dropdown is-open="status.isopen">
+          <button id="single-button" type="button" class="btn-small btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+            {{taskPriority}}<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+            <li role="menuitem"><a ng-click="setPriority('High')">High</a></li>
+            <li role="menuitem"><a ng-click="setPriority('Medium')">Medium</a></li>
+            <li role="menuitem"><a ng-click="setPriority('Low')">Low</a></li>
+          </ul>
+        </div>
+      </td>
+      <td>
+        <button type="button" class="btn-small btn-danger" ng-click="cancelAddTask()">Cancel</button>
+        <button type="button" class="btn-small btn-primary" ng-click="addTask()">Save</button>
+      </td>
+    </form>
+    </tr>
+
+    <tr ng-repeat="task in home.filteredTasks()">
+      <td>{{ task.name }}</td>
+      <td>{{ task.priority}}</td>
+      <td>{{taskStatus(task)}}</td>
+      <td>
+        <button type="button" class="btn-small btn-danger"  ng-click="cancelCurrentTask(task)">Remove Task</button>
+        <button type="button" class="btn-small btn-success" ng-hide="task.isCompleted == true || isExpired(task)" ng-click="completeCurrentTask(task)">Complete Task</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>
