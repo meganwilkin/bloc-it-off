@@ -1,0 +1,22 @@
+.nav .btn {
+  padding: 5px;
+  margin: 8px;
+}
+
+.container {
+  padding: 0 !important;
+}
+
+.panel .panel-heading {
+  padding: 18px;
+  font-weight: bold;
+}
+
+.panel .panel-heading .btn {
+  padding: 5px;
+  margin: 0px;
+}
+
+.panel thead a {
+  text-decoration: none;
+}

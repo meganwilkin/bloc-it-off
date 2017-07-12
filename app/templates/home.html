@@ -21,7 +21,7 @@
 
 <div class="container">
 <div class="col-md-3">
-  <h4>Task Priority Filter</h4>
+  <h5>Task Priority Filter</h5>
   <div class="list-group">
     <a href="#" class="list-group-item" ng-class="showHighPriority ? 'active' : '' " ng-click="showHighPriority = !showHighPriority">High</a>
     <a href="#" class="list-group-item" ng-class="showMediumPriority ? 'active' : ''" ng-click="showMediumPriority = !showMediumPriority">Medium</a>
@@ -34,13 +34,26 @@
     My Bloc It Off Tasks
     <span class="pull-right"><a href="#" ng-click="showAddTask = !showAddTask">
       <!-- Collapse -->
-      <button type="button" class="btn btn-primary">Add Task</button>
+      <button type="button" ng-disabled="showAddTask" class="btn btn-primary">Add Task</button>
     </a>
     </span>
   </div>
 <table class="table">
   <thead>
-    <tr><th>Task Name</th> <th>Priority</th> <th>Status</th><th>Task Action</th> </tr>
+    <tr>
+      <th>
+        <a href="#" ng-class="sortOrder == 1 ? 'dropdown' : 'dropup'" ng-click="sortBy('taskName')">Task Name <span ng-class="sortColumn == 'taskName' ? 'caret' : ''"></span></a>
+      </th>
+      <th>
+        <a href="#" ng-class="sortOrder == 1 ? 'dropdown' : 'dropup'" ng-click="sortBy('taskPriority')">Priority <span ng-class="sortColumn == 'taskPriority' ? 'caret' : ''"></span></a>
+      </th>
+      <th>
+        <a href="#" ng-class="sortOrder == 1 ? 'dropdown' : 'dropup'" ng-click="sortBy('taskStatus')">Status <span ng-class="sortColumn == 'taskStatus' ? 'caret' : ''"></span></a>
+      </th>
+      <th>
+        <a href="#" ng-class="sortOrder == 1 ? 'dropdown' : 'dropup'" ng-click="sortBy('taskRemaining')">Time Remaining <span ng-class="sortColumn == 'taskRemaining' ? 'caret' : ''"></span></a>
+      </th>
+      <th>Task Action</th> </tr>
   </thead>
   <tbody>
     <tr ng-show="showAddTask">
@@ -50,7 +63,7 @@
       </td>
       <td>
         <div class="btn-group" uib-dropdown is-open="status.isopen">
-          <button id="single-button" type="button" class="btn-small btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+          <button id="single-button" type="button" class="btn-small" uib-dropdown-toggle ng-disabled="disabled">
             {{taskPriority}}<span class="caret"></span>
           </button>
           <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
@@ -59,6 +72,12 @@
             <li role="menuitem"><a ng-click="setPriority('Low')">Low</a></li>
           </ul>
         </div>
+      </td>
+      <td>
+        NEW!
+      </td>
+      <td>
+        7 days
       </td>
       <td>
         <button type="button" class="btn-small btn-danger" ng-click="cancelAddTask()">Cancel</button>
@@ -71,6 +90,7 @@
       <td>{{ task.name }}</td>
       <td>{{ task.priority}}</td>
       <td>{{taskStatus(task)}}</td>
+      <td>{{timeRemaining(task)}}</td>
       <td>
         <button type="button" class="btn-small btn-danger"  ng-click="cancelCurrentTask(task)">Remove Task</button>
         <button type="button" class="btn-small btn-success" ng-hide="task.isCompleted == true || isExpired(task)" ng-click="completeCurrentTask(task)">Complete Task</button>

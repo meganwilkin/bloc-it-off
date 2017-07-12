@@ -9,8 +9,86 @@
             filtered.push(taskToCheck);
           }
         });
-        return filtered;
+
+        var sortedFiltered = [];
+
+        sortedFiltered = filtered.sort(this.sortArray);
+
+        return sortedFiltered;
       }
+
+      this.sortArray = function (a,b) {
+        if ($scope.sortColumn == "taskName") {
+          if (a.name.toUpperCase() < b.name.toUpperCase())
+            return -1 * $scope.sortOrder;
+            if (a.name.toUpperCase() > b.name.toUpperCase())
+              return 1 * $scope.sortOrder;
+        }
+
+        if ($scope.sortColumn == "taskPriority") {
+          if ($scope.priorityToNumber(a.priority) < $scope.priorityToNumber(b.priority))
+            return -1 * $scope.sortOrder;
+          if ($scope.priorityToNumber(a.priority) > $scope.priorityToNumber(b.priority))
+              return 1 * $scope.sortOrder;
+        }
+
+        if ($scope.sortColumn == "taskStatus") {
+          if ($scope.statusToNumber(Task.taskStatus(a)) < $scope.statusToNumber(Task.taskStatus(b)))
+            return -1 * $scope.sortOrder;
+          if ($scope.statusToNumber(Task.taskStatus(a)) > $scope.statusToNumber(Task.taskStatus(b)))
+              return 1 * $scope.sortOrder;
+        }
+
+        if ($scope.sortColumn == "taskRemaining") {
+          if ($scope.remainingToNumber(a) < $scope.remainingToNumber(b))
+            return -1 * $scope.sortOrder;
+          if ($scope.remainingToNumber(a) > $scope.remainingToNumber(b))
+            return 1 * $scope.sortOrder;
+        }
+
+        return 0;
+      }
+
+      $scope.priorityToNumber = function(priority) {
+        if (priority == "High")
+          return 1;
+        if (priority == "Medium")
+          return 2;
+        return 3;
+      }
+
+      $scope.statusToNumber = function(status) {
+        if (status == "Expiring")
+          return 1;
+        if (status == "Current")
+          return 2;
+        if (status == "Completed")
+          return 3;
+        return 4;
+      }
+
+      $scope.remainingToNumber = function(task) {
+        if (task.isCompleted == true) {
+          return 0;
+        }
+        return task.createdAt;
+      }
+
+      $scope.sortColumn = "taskName";
+      $scope.sortOrder = 1;
+
+      $scope.sortBy = function(sortColumn) {
+        if ($scope.sortColumn == sortColumn) {
+          $scope.sortOrder = $scope.sortOrder * -1;
+        }         else {
+          $scope.sortColumn = sortColumn;
+          $scope.sortOrder = 1;
+        }
+
+        //console.log($scope.sortColumn + ":" + $scope.sortOrder);
+      }
+
+
 
       // add scope
       $scope.addTask = function() {
@@ -36,6 +114,10 @@
 
       $scope.taskStatus = function(task) {
         return Task.taskStatus(task);
+      }
+
+      $scope.timeRemaining = function(task) {
+        return Task.timeRemaining(task);
       }
 
       $scope.isExpiring = function(task) {

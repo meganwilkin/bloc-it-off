@@ -53,6 +53,34 @@
           return true;
         }
       },
+      timeRemaining: function(task){
+        // Could be done using a filter too
+        if (!this.isExpired(task) && !task.isCompleted) {
+          var timeDifference = (task.createdAt + 8640000 * 7) - (Date.now());
+          if (timeDifference > 8640000) {
+            var days = Math.floor(timeDifference / 8640000);
+            if (days > 1) {
+              return days + " days";
+            } else {
+              return days + " day";
+            }
+          }
+          else {
+            var milliseconds = parseInt((timeDifference%1000)/100)
+                , seconds = parseInt((timeDifference/1000)%60)
+                , minutes = parseInt((timeDifference/(1000*60))%60)
+                , hours = parseInt((timeDifference/(1000*60*60))%24);
+
+            // hours = (hours < 10) ? "0" + hours : hours;
+            // minutes = (minutes < 10) ? "0" + minutes : minutes;
+            // seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            return hours + " hrs " + minutes + " mins";
+          }
+        }
+        return "";
+
+      },
 
       all: tasks
         // add: addTask
